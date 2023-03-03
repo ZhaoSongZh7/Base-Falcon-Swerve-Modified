@@ -7,6 +7,7 @@ import java.util.List;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
@@ -14,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -30,7 +32,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {    
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    private final XboxController driver = new XboxController(0);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -43,24 +45,30 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Turret m_Turret = new Turret();
     private final exampleAuto auto = new exampleAuto(s_Swerve);
+
+
+    // Commands
+    private final pushPiston m_pushPiston = new pushPiston(m_Turret);
 
         // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
         // for every path in the group
-        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("test", new PathConstraints(4, 3));
+        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Test Path One", new PathConstraints(4, 3));
         PathPlannerTrajectory test = PathPlanner.loadPath("test", new PathConstraints(4, 3));
 
         // // This is just an example event map. It would be better to have a constant, global event map
         // // in your code that will be used by all path following commands.
         HashMap<String, Command> eventMap = new HashMap<>();
+        
         // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose, // Pose2d supplier
             s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
             Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-            new PIDConstants(0.01, 0.0, 0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-            new PIDConstants(0.25, 0, 0.1), // PID constants to correct for rotation error (used to create the rotation controller)
+            new PIDConstants(0.00, 0.0, 0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+            new PIDConstants(0, 0, 0), // PID constants to correct for rotation error (used to create the rotation controller)
             s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
             eventMap,
             true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
@@ -94,6 +102,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
+        new JoystickButton(driver, 2).whileTrue(m_pushPiston);
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
