@@ -5,28 +5,30 @@
 package frc.robot.autos;
 
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feedBall;
+import frc.robot.commands.stopFeeder;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
-import frc.robot.commands.feedBall;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class moveAuto extends SequentialCommandGroup {
-  Turret m_Turret = new Turret();
   /** Creates a new moveAuto. */
-  public moveAuto(Swerve s_Swerve) {
+  public moveAuto(Swerve s_Swerve, Turret turret) {
     addCommands(  
-      new InstantCommand(() -> {
-        s_Swerve.zeroGyro();
-      }, s_Swerve));
       s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 2, 3), true)
-      .alongWith(new RunCommand(() -> {m_Turret.setOutputSpeed(0.4);}, s_Swerve));
+      .alongWith(new feedBall(turret).alongWith(new WaitCommand(1)).andThen(new stopFeeder(turret)))
+      // new InstantCommand(() -> {
+      //   s_Swerve.zeroGyro();
+      // }, s_Swerve));
+      // s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 2, 3), true)
+      // .alongWith(new RunCommand(() -> {m_Turret.setOutputSpeed(0.4);}, s_Swerve));
+    );
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
   }
