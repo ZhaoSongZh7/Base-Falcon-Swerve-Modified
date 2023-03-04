@@ -52,6 +52,8 @@ public class RobotContainer {
     // Commands
     private final pushPiston m_pushPiston = new pushPiston(m_Turret);
 
+    private final moveAuto m_moveAuto = new moveAuto(s_Swerve);
+
         // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
         // for every path in the group
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Test Path One", new PathConstraints(4, 3));
@@ -114,7 +116,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
-        return fullAuto;
+        // return fullAuto;
+        return m_moveAuto;
         // return s_Swerve.followTrajectoryCommand(test, true);
     }
 }
