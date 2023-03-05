@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 
-public class stopFeeder extends CommandBase {
+public class StopFeeder extends CommandBase {
   Turret turret;
   /** Creates a new stopFeeder. */
-  public stopFeeder(Turret turret) {
+  public StopFeeder(Turret turret) {
     this.turret = turret;
     addRequirements(turret);
     // Use addRequirements() here to declare subsystem dependencies.

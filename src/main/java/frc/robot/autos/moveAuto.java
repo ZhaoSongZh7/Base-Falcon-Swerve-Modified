@@ -7,10 +7,11 @@ package frc.robot.autos;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.feedBall;
-import frc.robot.commands.stopFeeder;
+import frc.robot.commands.FeedBall;
+import frc.robot.commands.StopFeeder;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 
@@ -20,15 +21,23 @@ import frc.robot.subsystems.Turret;
 public class moveAuto extends SequentialCommandGroup {
   /** Creates a new moveAuto. */
   public moveAuto(Swerve s_Swerve, Turret turret) {
-    addCommands(  
-      s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 2, 3), true)
-      .alongWith(new feedBall(turret).alongWith(new WaitCommand(1)).andThen(new stopFeeder(turret)))
+    addCommands(
+      new SequentialCommandGroup(s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 3, 4), true),
+      new FeedBall(turret).withTimeout(4),
+      new StopFeeder(turret)
+      )
+    );
+    // addCommands(  
+    //   s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 4, 3), true)
+    //   // .alongWith(new FeedBall(turret).alongWith(new WaitCommand(1).andThen(new StopFeeder(turret)))
+    //   .alongWith(new FeedBall(turret).withTimeout(4).andThen(new StopFeeder(turret))
+    //   )
       // new InstantCommand(() -> {
       //   s_Swerve.zeroGyro();
       // }, s_Swerve));
       // s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 2, 3), true)
       // .alongWith(new RunCommand(() -> {m_Turret.setOutputSpeed(0.4);}, s_Swerve));
-    );
+    //);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
   }

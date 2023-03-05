@@ -50,7 +50,7 @@ public class RobotContainer {
 
 
     // Commands
-    private final pushPiston m_pushPiston = new pushPiston(m_Turret);
+    private final PushPiston m_pushPiston = new PushPiston(m_Turret);
 
         // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
         // for every path in the group

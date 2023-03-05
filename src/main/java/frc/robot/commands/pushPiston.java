@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 
-public class pushPiston extends CommandBase {
+public class PushPiston extends CommandBase {
   Turret turret;
   /** Creates a new pushPiston. */
-  public pushPiston(Turret turret) {
+  public PushPiston(Turret turret) {
     this.turret = turret;
     addRequirements(turret);
     // Use addRequirements() here to declare subsystem dependencies.

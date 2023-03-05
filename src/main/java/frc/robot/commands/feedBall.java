@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 
-public class feedBall extends CommandBase {
+public class FeedBall extends CommandBase {
   Turret m_Turret;
   /** Creates a new FeedBall. */
-  public feedBall(Turret m_Turret) {
+  public FeedBall(Turret m_Turret) {
     this.m_Turret = m_Turret;
     addRequirements(m_Turret);
     // Use addRequirements() here to declare subsystem dependencies.
