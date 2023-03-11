@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 
 public class FeedBall extends CommandBase {
-  Turret m_Turret;
+  Turret turret;
   /** Creates a new FeedBall. */
-  public FeedBall(Turret m_Turret) {
-    this.m_Turret = m_Turret;
-    addRequirements(m_Turret);
+  public FeedBall(Turret turret) {
+    this.turret = turret;
+    addRequirements(turret);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,13 +23,13 @@ public class FeedBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Turret.setOutputSpeed(0.4);
+    turret.setOutputSpeed(-0.2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Turret.setOutputSpeed(0);
+    turret.setOutputSpeed(0);
   }
 
   // Returns true when the command should end.

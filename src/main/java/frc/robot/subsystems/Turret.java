@@ -16,11 +16,16 @@ public class Turret extends SubsystemBase {
   public Solenoid turretPiston;
   public Compressor comp;
   public WPI_TalonFX feederMotor;
+  public WPI_TalonFX topTurretMotor;
+  public WPI_TalonFX bottomTurretMotor;
 
   /** Creates a new Turret. */
   public Turret() {
     turretPiston = new Solenoid(PneumaticsModuleType.REVPH, 1);
     feederMotor = new WPI_TalonFX(23);
+    topTurretMotor = new WPI_TalonFX(24);
+    bottomTurretMotor = new WPI_TalonFX(25);
+
     comp = new Compressor(PneumaticsModuleType.REVPH);
     comp.enableAnalog(75, 90);
 
@@ -31,7 +36,13 @@ public class Turret extends SubsystemBase {
   }
 
   public void setOutputSpeed(double speed) {
-    feederMotor.set(speed);
+    feederMotor.set(speed * 2);
+    topTurretMotor.set(-speed * 2);
+    bottomTurretMotor.set(-speed);
+  }
+
+  public void stop() {
+    feederMotor.set(0);
   }
 
   @Override

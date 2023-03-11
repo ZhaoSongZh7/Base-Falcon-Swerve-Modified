@@ -46,11 +46,14 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Turret m_Turret = new Turret();
+    private final Intake m_Intake = new Intake();
     private final exampleAuto auto = new exampleAuto(s_Swerve);
 
 
     // Commands
-    private final PushPiston m_pushPiston = new PushPiston(m_Turret);
+    private final PushPiston m_PushPiston = new PushPiston(m_Turret);
+    private final FeedBall m_FeedBall = new FeedBall(m_Turret);
+    private final IntakeBall m_IntakeBall = new IntakeBall(m_Intake);
 
         // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
         // for every path in the group
@@ -102,7 +105,9 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        new JoystickButton(driver, 2).whileTrue(m_pushPiston);
+        new JoystickButton(driver, 2).whileTrue(m_PushPiston);
+        new JoystickButton(driver, 5).whileTrue(m_FeedBall);
+        new JoystickButton(driver, 6).whileTrue(m_IntakeBall);
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
@@ -115,7 +120,7 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
         // return fullAuto;
-        return new moveAuto(s_Swerve, m_Turret);
+        return new moveAuto(s_Swerve, m_Turret, m_Intake);
         // return s_Swerve.followTrajectoryCommand(test, true);
     }
 }

@@ -4,14 +4,17 @@
 
 package frc.robot.autos;
 
+import java.lang.reflect.Field;
+
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.FeedBall;
-import frc.robot.commands.StopFeeder;
+import frc.robot.commands.IntakeBall;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Turret;
 
@@ -20,13 +23,27 @@ import frc.robot.subsystems.Turret;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class moveAuto extends SequentialCommandGroup {
   /** Creates a new moveAuto. */
-  public moveAuto(Swerve s_Swerve, Turret turret) {
+  public moveAuto(Swerve s_Swerve, Turret turret, Intake intake) {
+    // addCommands(
+    //   new SequentialCommandGroup(s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", new PathConstraints(4, 3)), true),
+    //   new FeedBall(turret).withTimeout(4)
+    // ));
+
+    // addCommands(
+    //   new SequentialCommandGroup(s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(4, 3)), true),
+    //   new IntakeBall(intake).withTimeout(2)
+    // ));
+
     addCommands(
-      new SequentialCommandGroup(s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 3, 4), true),
-      new FeedBall(turret).withTimeout(4),
-      new StopFeeder(turret)
-      )
-    );
+      new SequentialCommandGroup(s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("One Ball Move", new PathConstraints(4, 3)), true),
+      new IntakeBall(intake).withTimeout(2)
+    ));
+
+    addCommands(
+      new SequentialCommandGroup(s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("One Ball Shoot", new PathConstraints(4, 3)), true),
+      new FeedBall(turret).withTimeout(2)
+    ));
+
     // addCommands(  
     //   s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("test", 4, 3), true)
     //   // .alongWith(new FeedBall(turret).alongWith(new WaitCommand(1).andThen(new StopFeeder(turret)))
